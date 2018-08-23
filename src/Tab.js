@@ -40,12 +40,20 @@ export default class Tab extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
     (this: any).clickTab = this.clickTab.bind(this);
+    (this: any).mouseDownTab = this.mouseDownTab.bind(this);
     (this: any).clickDelete = this.clickDelete.bind(this);
   }
 
   clickTab() {
     const {handleTabChange, index} = this.props;
     handleTabChange(index);
+  }
+
+  mouseDownTab(event) {
+    if (event.nativeEvent.button != 1) {
+      return;
+    }
+    this.clickDelete(event);
   }
 
   clickDelete(event: SyntheticEvent<HTMLButtonElement>) {
@@ -59,6 +67,7 @@ export default class Tab extends React.PureComponent<Props> {
     const TabComponent = CustomTabStyle || TabStyle;
     return (
       <TabComponent innerRef={node => this.__INTERNAL_NODE = node}
+                    onMouseDown={this.mouseDownTab}
                     onClick={this.clickTab}
                     active={active}
                     vertical={vertical}
